@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://www.urbancode.com/PluginXMLSchema_v1">
+    <header>
+        <identifier version="1" id="com.serena.air.plugin.MicroFocus-LoadRunner"
+                    name="Micro Focus LoadRunner"/>
+        <description>
+            The Micro Focus LoadRunner Plugin is a quality automation based plugin.
+            It is run during development and deployment to automate the execution of performance tests.
+        </description>
+        <tag>Quality/Micro Focus/LoadRunner</tag>
+    </header>
+    <!-- ==================================== -->
+    <!--   PLUGIN STEPS                       -->
+    <!-- ==================================== -->
+    <step-type name="Execute LoadRunner Scenario">
+        <description>Execute a LoadRunner Scenario from the file system</description>
+        <properties>
+            <property name="lrInstallDir" required="true">
+                <property-ui type="textBox"
+                             label="LoadRunner Installation Directory"
+                             default-value="${p:resource/lrInstallDir}"
+                             description="The path to your LoadRunner installation directory.
+                        This is the parent of the bin directory, which contains both the
+                        WLRun and AnalysisUI executable files. Either
+                        specify an absolute path
+                        (i.e. C:\Program Files (x86)\Micro Focus\LoadRunner)
+                        or a path that is relative to your working directory
+                        (i.e. LoadRunner)."/>
+            </property>
+            <property name="testPath" required="true">
+                <property-ui type="textBox"
+                             label="Test Scenario Path"
+                             description="The path to your test scenario file (.LRS file).
+                        Either specify an absolute path
+                        (i.e. C:\Users\Administrator\Controller\scenario\Test Scenario.lrs)
+                        or a path that is relative to your working directory
+                        (i.e. Test Scenario.lrs)."/>
+            </property>
+            <property name="lrResultsName" required="true">
+                <property-ui type="textBox"
+                             label="LoadRunner Results Name"
+                             default-value="DA_LR_RESULTS"
+                             description="The name of the new directory that will contain the results of your
+                        test scenario. This directory will be created under the step's working
+                        directory."/>
+            </property>
+            <property name="debugMode" required="false">
+                <property-ui type="checkBox" label="Debug Output" hidden="true"
+                             description="Select this option to display debug output during execution."/>
+            </property>
+        </properties>
+        <post-processing>
+            <![CDATA[
+                if (properties.get("exitCode") != 0) {
+                    properties.put("Status", "Failure");
+                }
+                else {
+                    properties.put("Status", "Success");
+                }
+            ]]>
+        </post-processing>
+        <command program="${GROOVY_HOME}/bin/groovy">
+            <arg value="-cp"/>
+            <arg path="classes:lib/*"/>
+            <arg value="-Djnp.disableDiscovery=true"/>
+            <arg file="lr_scenario_from_filesystem.groovy"/>
+            <arg file="${PLUGIN_INPUT_PROPS}"/>
+            <arg file="${PLUGIN_OUTPUT_PROPS}"/>
+        </command>
+    </step-type>
+    <step-type name="Analyze LoadRunner Scenario">
+        <description>Analyze a LoadRunner Scenario and produce a HTML Report</description>
+        <properties>
+            <property name="lrInstallDir" required="true">
+                <property-ui type="textBox"
+                             label="LoadRunner Installation Directory"
+                             default-value="${p:resource/lrInstallDir}"
+                             description="The path to your LoadRunner installation directory.
+                        This is the parent of the bin directory, which contains both the
+                        WLRun and AnalysisUI executable files. Either
+                        specify an absolute path
+                        (i.e. C:\Program Files (x86)\Micro Focus\LoadRunner)
+                        or a path that is relative to your working directory
+                        (i.e. LoadRunner)."/>
+            </property>
+            <property name="lrResultsName" required="true">
+                <property-ui type="textBox"
+                             label="LoadRunner Results Name"
+                             default-value="DA_LR_RESULTS"
+                             description="The name of the directory that contains the results of a
+                        test scenario. The default DA_ANALYSIS_TEMPLATE will create the HTML report 'An_Report1.html'."/>
+            </property>
+            <property name="templateName" required="true">
+                <property-ui type="textBox"
+                             label="Template Name"
+                             default-value="DA_ANALYSIS_TEMPLATE"
+                             description="The name of your LoadRunner Analysis template. The default
+                        value of 'DA_ANALYSIS_TEMPLATE' will import a custom template into
+                        the LoadRunner Analysis tool. This template is included with the plugin
+                        and generates a detailed HTML report in the agent's working directory when
+                        used during analysis. You may also create your own template in the
+                        LoadRunner Analysis UI and specify its name to use it during analysis.
+                        Please see the plugin documentation for more details."/>
+            </property>
+            <property name="debugMode" required="false">
+                <property-ui type="checkBox" label="Debug Output" hidden="true"
+                             description="Select this option to display debug output during execution."/>
+            </property>
+        </properties>
+        <post-processing>
+            <![CDATA[
+                if (properties.get("exitCode") != 0) {
+                    properties.put("Status", "Failure");
+                }
+                else {
+                    properties.put("Status", "Success");
+                }
+            ]]>
+        </post-processing>
+        <command program="${GROOVY_HOME}/bin/groovy">
+            <arg value="-cp"/>
+            <arg path="classes:lib/*"/>
+            <arg value="-Djnp.disableDiscovery=true"/>
+            <arg file="lr_analysis_from_filesystem.groovy"/>
+            <arg file="${PLUGIN_INPUT_PROPS}"/>
+            <arg file="${PLUGIN_OUTPUT_PROPS}"/>
+        </command>
+    </step-type>
+</plugin>

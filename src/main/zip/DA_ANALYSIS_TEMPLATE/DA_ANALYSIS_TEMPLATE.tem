@@ -1,0 +1,28 @@
+﻿[Workspace]
+VerNo=13
+IsSummaryData=0
+NumResults=1
+
+[Result0]
+NumFilters=0
+NumGraphs=5
+
+[DimensionFunctions]
+DimeFuncCount=1
+DimeFuncType0=FuncFragment
+FunctionName_UI0=Think Time
+DimensionName_UI0=Transaction Response Time,Aminimum,Amaximum
+FunctionFragmentValues_UI0=-Include Think Time
+DimensionFragmentValues_UI0=!([Value]-[Think Time])!
+
+[TemplateOptions]
+AutoHtml=1
+OpenHtml=0
+AutoHtmlName=%ResultDir%\An_Report1.html
+AutoSave=1
+AutoSaveName=%ResultDir%\An_Session1
+AutoClose=1
+
+[GRID_LIST]
+COUNT=0
+
