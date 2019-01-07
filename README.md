@@ -5,9 +5,8 @@ It is run during development and deployment process to automate the execution of
 
 This plugin is a work in progress but it is intended to provide the following steps:
 
-* [x] **LoadRunner Scenario from File system** - Execute a LoadRunner Scenario from the File System
-* [x] **Publish Results to Octane** - Take the output of one of the preceding steps and publish the test results to Octane
-* [ ] **Publish Results to HTML** - Take the XML output of one the preceding steps and convert to HTML file so it can be attached in DA
+* [x] **LoadRunner Scenario from File system** - Execute a LoadRunner Scenario from the file system
+* [x] **Analyze LoadRunner Scenario** - Analyze an executed LoadRunner scenario and produce a HTML Report
 
 Download the latest version from the _release_ directory and install into Deployment Automation.
 
