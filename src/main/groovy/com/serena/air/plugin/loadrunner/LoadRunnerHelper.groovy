@@ -10,11 +10,8 @@ import java.util.regex.Pattern
 import org.apache.commons.io.FileUtils
 import org.ini4j.Wini
 
-import com.urbancode.air.CommandHelper
-
 class LoadRunnerHelper {
     private File workDir
-    private CommandHelper cmdHelper
     private File lrInstallDir
     private File wlRunExe
     private File analysisUIExe
@@ -31,8 +28,6 @@ class LoadRunnerHelper {
 
     public LoadRunnerHelper(String lrInstallPath, File workDir) {
         this.workDir = workDir
-
-        cmdHelper = new CommandHelper(workDir)
         lrInstallDir = resolveFilePath(lrInstallPath)
         wlRunExe = new File(lrInstallDir, "bin" + File.separator + "Wlrun.exe")
         analysisUIExe = new File(lrInstallDir, "bin" + File.separator + "AnalysisUI.exe")
@@ -54,8 +49,11 @@ class LoadRunnerHelper {
 
         println("Running test scenario '${testPath}'.")
         int exitVal = executeCLICommand(cmdArgs)
-        println("")
-        println("Test scenario has executed successfully.")
+        if (exitVal != 0) {
+            println("Test scenario failed with exit code: ${exitVal}")
+        } else {
+            println("Test scenario has executed successfully.")
+        }
 
         return exitVal
     }
@@ -85,8 +83,11 @@ class LoadRunnerHelper {
         /* Generate the HTML analysis file */
         println("Analyzing the test results.")
         int exitVal = executeCLICommand(cmdArgs)
-        println("")
-        println("Completed test result analysis.")
+        if (exitVal != 0) {
+            println("Test results analysis failed with exit code: ${exitVal}")
+        } else {
+            println("Completed test result analysis.")
+        }
 
         return exitVal
     }
@@ -211,7 +212,23 @@ class LoadRunnerHelper {
     }
 
     /* Run the CLI command. */
-    private int executeCLICommand(List<String> cmdArgs) {
-        return cmdHelper.runCommand(cmdArgs.join(' '), cmdArgs)
+    private int executeCLICommand(List<String> commandLine) {
+        def exitCode = 0
+        // print out command info
+        println("INFO - Executing: ${commandLine.join(' ')}")
+
+        //
+        // Launch Process
+        //
+        final def processBuilder = new ProcessBuilder(commandLine as String[]).directory(workDir)
+        final def process = processBuilder.start()
+        process.out.close() // close stdin
+        process.waitForProcessOutput(System.out, System.err) // forward stdout and stderr
+        process.waitFor()
+
+        exitCode = process.exitValue()
+
+        if (debugMode) println "DEBUG - command exit code: ${exitCode}"
+        return exitCode
     }
 }

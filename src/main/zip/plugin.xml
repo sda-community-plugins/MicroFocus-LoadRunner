@@ -12,16 +12,16 @@
     <!-- ==================================== -->
     <!--   PLUGIN STEPS                       -->
     <!-- ==================================== -->
-    <step-type name="Execute LoadRunner Scenario">
-        <description>Execute a LoadRunner Scenario from the file system</description>
+    <step-type name="Execute LoadRunner Scenario (WlRrun)">
+        <description>Execute a LoadRunner Scenario using WlRun.exe</description>
         <properties>
             <property name="lrInstallDir" required="true">
                 <property-ui type="textBox"
                              label="LoadRunner Installation Directory"
                              default-value="${p:resource/lrInstallDir}"
                              description="The path to your LoadRunner installation directory.
-                        This is the parent of the bin directory, which contains both the
-                        WLRun and AnalysisUI executable files. Either
+                        This is the parent of the bin directory, which contains the
+                        WLRun executable file. Either
                         specify an absolute path
                         (i.e. C:\Program Files (x86)\Micro Focus\LoadRunner)
                         or a path that is relative to your working directory
@@ -63,21 +63,21 @@
             <arg value="-cp"/>
             <arg path="classes:lib/*"/>
             <arg value="-Djnp.disableDiscovery=true"/>
-            <arg file="lr_scenario_from_filesystem.groovy"/>
+            <arg file="lr_scenario_wlrun.groovy"/>
             <arg file="${PLUGIN_INPUT_PROPS}"/>
             <arg file="${PLUGIN_OUTPUT_PROPS}"/>
         </command>
     </step-type>
-    <step-type name="Analyze LoadRunner Scenario">
-        <description>Analyze a LoadRunner Scenario and produce a HTML Report</description>
+    <step-type name="Analyze LoadRunner Scenario (AnalysisUI)">
+        <description>Analyze an executed LoadRunner scenario and produce a HTML Report using AnalysisUI.exe</description>
         <properties>
             <property name="lrInstallDir" required="true">
                 <property-ui type="textBox"
                              label="LoadRunner Installation Directory"
                              default-value="${p:resource/lrInstallDir}"
                              description="The path to your LoadRunner installation directory.
-                        This is the parent of the bin directory, which contains both the
-                        WLRun and AnalysisUI executable files. Either
+                        This is the parent of the bin directory, which contains the
+                        AnalysisUI executable file. Either
                         specify an absolute path
                         (i.e. C:\Program Files (x86)\Micro Focus\LoadRunner)
                         or a path that is relative to your working directory
@@ -99,8 +99,7 @@
                         the LoadRunner Analysis tool. This template is included with the plugin
                         and generates a detailed HTML report in the agent's working directory when
                         used during analysis. You may also create your own template in the
-                        LoadRunner Analysis UI and specify its name to use it during analysis.
-                        Please see the plugin documentation for more details."/>
+                        LoadRunner Analysis UI and specify its name to use it during analysis."/>
             </property>
             <property name="debugMode" required="false">
                 <property-ui type="checkBox" label="Debug Output" hidden="true"
@@ -121,7 +120,7 @@
             <arg value="-cp"/>
             <arg path="classes:lib/*"/>
             <arg value="-Djnp.disableDiscovery=true"/>
-            <arg file="lr_analysis_from_filesystem.groovy"/>
+            <arg file="lr_analysis_analysisui.groovy"/>
             <arg file="${PLUGIN_INPUT_PROPS}"/>
             <arg file="${PLUGIN_OUTPUT_PROPS}"/>
         </command>

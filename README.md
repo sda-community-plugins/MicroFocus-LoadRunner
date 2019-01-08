@@ -1,14 +1,21 @@
-# Micro Focus LoadRunner Plugin
+# Micro Focus LoadRunner plugin
 
 The _Micro Focus LoadRunner_ plugin is a quality automation based plugin. 
 It is run during development and deployment process to automate the execution of performance tests.
 
 This plugin is a work in progress but it is intended to provide the following steps:
 
-* [x] **LoadRunner Scenario from File system** - Execute a LoadRunner Scenario from the file system
-* [x] **Analyze LoadRunner Scenario** - Analyze an executed LoadRunner scenario and produce a HTML Report
+* [x] **Execute LoadRunner Scenario (Wlrun)** - Execute a LoadRunner Scenario using Wlrun.exem
+* [x] **Analyze LoadRunner Scenario (AnalysisUI)** - Analyze an executed LoadRunner scenario and produce a HTML Report using AnalysisUI.exe
 
-Download the latest version from the _release_ directory and install into Deployment Automation.
+The plugin currently uses the _WlRun.exe_ and _Analysis.exe_ executables - the intention is to use the _HpToolsLauncher_
+and _LRAnalysisLauncher_ executables from the [Micro Focus Application Automation Tools](https://github.com/jenkinsci/hpe-application-automation-tools-plugin/)
+plugin for more configurability and stability at a later date.
+
+### Installing the plugin
+ 
+Download the latest version from the _release_ directory and install into Deployment Automation from the 
+**Administration\Automation\Plugins** page.
 
 Because of the nature of LoadRunner and its integration this plugin only works on Windows based systems.
 
@@ -26,7 +33,7 @@ To build the plugin you will need to clone the following repositories (at the sa
  ```  
 
 This will create a _.zip_ file in the `target` directory when you can then install into Deployment Automation
-from the **System\Automation** page.
+from the **Administration\Automation\Plugins** page.
 
 If you have any feedback or suggestions on this template then please contact me using the details below.
 
